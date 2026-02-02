@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Order System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+
+        .links {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        a:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .label {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🍽️ Food Order System</h1>
+        <div class="links">
+            <a href="customer.html">
+                <span class="icon">👤</span>
+                <span class="label">Customer</span>
+            </a>
+            <a href="cashier.html">
+                <span class="icon">💰</span>
+                <span class="label">Cashier</span>
+            </a>
+            <a href="kitchen.html">
+                <span class="icon">🍳</span>
+                <span class="label">Kitchen</span>
+            </a>
+            <a href="manager.html">
+                <span class="icon">👔</span>
+                <span class="label">Manager</span>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
