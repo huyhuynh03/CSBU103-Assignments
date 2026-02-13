@@ -1,137 +1,290 @@
-<!DOCTYPE html>
+<!doctype html>
+<!--
+  ============================================================
+  CALCULATOR - WEB APPLICATION
+  ============================================================
+  Mô tả    : Ứng dụng máy tính web sử dụng HTML, CSS, JS
+  Bài tập  : CSBU103 - Assignment Week #4
+  Phiên bản: 1.0
+
+  Các phép toán hỗ trợ:
+    + : Cộng (Addition)
+    - : Trừ (Subtraction)
+    × : Nhân (Multiplication)
+    ÷ : Chia (Division)
+    % : Chia lấy dư (Modular Divide)
+
+  Cấu trúc dự án:
+    calculator/
+    ├── index.html        <- File này (Entry point)
+    ├── css/style.css     <- Giao diện
+    ├── js/calculator.js  <- Logic xử lý
+    └── README.md         <- Tài liệu hướng dẫn
+  ============================================================
+-->
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Simple Calculator</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #222;
-            font-family: Arial, sans-serif;
-        }
+  <head>
+    <!-- ===== META TAGS ===== -->
+    <!-- Charset UTF-8: Hỗ trợ tiếng Việt và ký tự đặc biệt -->
+    <meta charset="UTF-8" />
+    <!-- Responsive viewport: Đảm bảo hiển thị đúng trên mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Mô tả trang cho SEO và chia sẻ mạng xã hội -->
+    <meta
+      name="description"
+      content="Máy tính web hỗ trợ cộng, trừ, nhân, chia, chia lấy dư - CSBU103 Week 4"
+    />
+    <meta name="author" content="CSBU103 Student" />
 
-        .calculator {
-            width: 320px;
-            background: #333;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
+    <!-- ===== TITLE ===== -->
+    <title>Calculator | CSBU103 - Week 4</title>
 
-        .display {
-            width: 100%;
-            height: 60px;
-            background: #000;
-            color: #0f0;
-            font-size: 28px;
-            text-align: right;
-            padding: 10px;
-            border-radius: 8px;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-        }
+    <!-- ===== STYLESHEET ===== -->
+    <!-- Tách CSS ra file riêng để dễ quản lý và bảo trì -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
+  <body>
+    <!-- ==========================================================
+         APP CONTAINER
+         Bọc toàn bộ ứng dụng, dùng flexbox để căn giữa
+         ========================================================== -->
+    <main class="app-container">
+      <!-- ==========================================================
+             CALCULATOR
+             Khung chính của máy tính
+             ========================================================== -->
+      <div class="calculator">
+        <!-- === HEADER: Tiêu đề nhỏ phía trên === -->
+        <div class="calculator-header">
+          <h1>Calculator</h1>
+        </div>
 
-        button {
-            padding: 20px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            background: #555;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        <!-- ==========================================================
+                 DISPLAY AREA
+                 Vùng hiển thị gồm 2 dòng:
+                 - display-expression: Biểu thức đang tính (VD: 5 + 3)
+                 - display-result: Số đang nhập hoặc kết quả
+                 ========================================================== -->
+        <div class="display" id="display">
+          <!-- Dòng expression: hiển thị biểu thức phía trên -->
+          <div class="display-expression" id="display-expression"></div>
+          <!-- Dòng result: hiển thị số/kết quả phía dưới -->
+          <div class="display-result" id="display-result">0</div>
+        </div>
 
-        button:hover {
-            background: #777;
-        }
+        <!-- ==========================================================
+                 BUTTON GRID
+                 Lưới nút bấm 4 cột sử dụng CSS Grid
+                 Mỗi nút có:
+                 - data-value: giá trị để xử lý keyboard highlight
+                 - onclick: gọi hàm JS tương ứng
+                 - class: loại nút (number, operator, clear, v.v.)
+                 ========================================================== -->
+        <div class="buttons">
+          <!-- === Hàng 1: AC, DEL, MOD, ÷ === -->
+          <!-- AC: Xóa tất cả (All Clear) -->
+          <button class="btn btn-clear" data-value="AC" onclick="clearAll()">
+            AC
+          </button>
+          <!-- DEL: Xóa 1 ký tự cuối (Delete) -->
+          <button
+            class="btn btn-delete"
+            data-value="DEL"
+            onclick="deleteChar()"
+          >
+            DEL
+          </button>
+          <!-- MOD: Phép chia lấy dư (Modular Divide) - YÊU CẦU BÀI TẬP -->
+          <button
+            class="btn btn-mod"
+            data-value="MOD"
+            onclick="inputOperator('MOD')"
+          >
+            MOD
+          </button>
+          <!-- ÷: Phép chia (Division) -->
+          <button
+            class="btn btn-operator"
+            data-value="÷"
+            onclick="inputOperator('÷')"
+          >
+            ÷
+          </button>
 
-        .operator {
-            background: #f39c12;
-        }
+          <!-- === Hàng 2: 7, 8, 9, × === -->
+          <button
+            class="btn btn-number"
+            data-value="7"
+            onclick="inputDigit('7')"
+          >
+            7
+          </button>
+          <button
+            class="btn btn-number"
+            data-value="8"
+            onclick="inputDigit('8')"
+          >
+            8
+          </button>
+          <button
+            class="btn btn-number"
+            data-value="9"
+            onclick="inputDigit('9')"
+          >
+            9
+          </button>
+          <!-- ×: Phép nhân (Multiplication) -->
+          <button
+            class="btn btn-operator"
+            data-value="×"
+            onclick="inputOperator('×')"
+          >
+            ×
+          </button>
 
-        .operator:hover {
-            background: #e67e22;
-        }
+          <!-- === Hàng 3: 4, 5, 6, − === -->
+          <button
+            class="btn btn-number"
+            data-value="4"
+            onclick="inputDigit('4')"
+          >
+            4
+          </button>
+          <button
+            class="btn btn-number"
+            data-value="5"
+            onclick="inputDigit('5')"
+          >
+            5
+          </button>
+          <button
+            class="btn btn-number"
+            data-value="6"
+            onclick="inputDigit('6')"
+          >
+            6
+          </button>
+          <!-- −: Phép trừ (Subtraction) -->
+          <button
+            class="btn btn-operator"
+            data-value="-"
+            onclick="inputOperator('-')"
+          >
+            −
+          </button>
 
-        .equal {
-            background: #27ae60;
-            grid-column: span 2;
-        }
-    </style>
-</head>
+          <!-- === Hàng 4: 1, 2, 3, + === -->
+          <button
+            class="btn btn-number"
+            data-value="1"
+            onclick="inputDigit('1')"
+          >
+            1
+          </button>
+          <button
+            class="btn btn-number"
+            data-value="2"
+            onclick="inputDigit('2')"
+          >
+            2
+          </button>
+          <button
+            class="btn btn-number"
+            data-value="3"
+            onclick="inputDigit('3')"
+          >
+            3
+          </button>
+          <!-- +: Phép cộng (Addition) -->
+          <button
+            class="btn btn-operator"
+            data-value="+"
+            onclick="inputOperator('+')"
+          >
+            +
+          </button>
 
-<body>
-<div class="calculator">
-    <div class="display" id="display">0</div>
+          <!-- === Hàng 5: 0 (2 cột), ±, = (2 cột sẽ tràn sang hàng 6) === -->
+          <!-- 0: Chiếm 2 cột (grid-column: span 2) -->
+          <button
+            class="btn btn-number btn-zero"
+            data-value="0"
+            onclick="inputDigit('0')"
+          >
+            0
+          </button>
+          <!-- Dấu chấm thập phân -->
+          <button
+            class="btn btn-number"
+            data-value="."
+            onclick="inputDigit('.')"
+          >
+            .
+          </button>
+          <!-- =: Tính kết quả - Chiếm 2 cột, nhưng ở đây chỉ 1 cột vì 0 đã chiếm 2 -->
+          <!-- Lưu ý: btn-equal có grid-column: span 2 trong CSS nhưng hàng này chỉ còn 1 ô -->
 
-    <div class="buttons">
-        <button onclick="clearAll()">AC</button>
-        <button onclick="delChar()">DEL</button>
-        <button onclick="append('%')" class="operator">%</button>
-        <button onclick="append('/')" class="operator">÷</button>
+          <!-- === Hàng 6: ±, = (chiếm 2 cột) === -->
+          <!-- ±: Đổi dấu dương/âm -->
+          <button class="btn btn-number" data-value="±" onclick="toggleSign()">
+            ±
+          </button>
+          <!-- =: Nút tính kết quả (Equal) - Chiếm 2 cột -->
+          <button class="btn btn-equal" data-value="=" onclick="calculate()">
+            =
+          </button>
+        </div>
 
-        <button onclick="append('7')">7</button>
-        <button onclick="append('8')">8</button>
-        <button onclick="append('9')">9</button>
-        <button onclick="append('*')" class="operator">×</button>
+        <!-- ==========================================================
+                 HISTORY SECTION
+                 Bảng lịch sử các phép tính đã thực hiện
+                 - Toggle mở/đóng bằng nút
+                 - Dữ liệu lưu trong localStorage
+                 ========================================================== -->
+        <div class="history-toggle">
+          <button
+            class="history-toggle-btn"
+            id="history-toggle-btn"
+            onclick="toggleHistory()"
+          >
+            ▾ Lịch sử
+          </button>
+        </div>
 
-        <button onclick="append('4')">4</button>
-        <button onclick="append('5')">5</button>
-        <button onclick="append('6')">6</button>
-        <button onclick="append('-')" class="operator">−</button>
+        <!-- Panel lịch sử - ẩn mặc định, mở khi click -->
+        <div class="history-panel" id="history-panel">
+          <ul class="history-list" id="history-list">
+            <!-- Các mục lịch sử sẽ được render bởi JS -->
+            <li class="history-empty">Chưa có phép tính nào</li>
+          </ul>
+          <!-- Nút xóa toàn bộ lịch sử -->
+          <div class="history-clear">
+            <button class="history-clear-btn" onclick="clearHistory()">
+              Xóa lịch sử
+            </button>
+          </div>
+        </div>
 
-        <button onclick="append('1')">1</button>
-        <button onclick="append('2')">2</button>
-        <button onclick="append('3')">3</button>
-        <button onclick="append('+')" class="operator">+</button>
+        <!-- ==========================================================
+                 KEYBOARD HINT
+                 Chỉ dẫn nhỏ cho biết hỗ trợ bàn phím
+                 (Tự ẩn trên mobile qua CSS media query)
+                 ========================================================== -->
+        <div class="keyboard-hint">
+          ⌨ Hỗ trợ bàn phím: <kbd>0-9</kbd> <kbd>+-*/</kbd> <kbd>Enter</kbd>
+          <kbd>Esc</kbd> <kbd>m</kbd>=MOD
+        </div>
+      </div>
+      <!-- /.calculator -->
+    </main>
+    <!-- /.app-container -->
 
-        <button onclick="append('0')" style="grid-column: span 2;">0</button>
-        <button onclick="append('.')">.</button>
-        <button onclick="calculate()" class="equal">=</button>
-    </div>
-</div>
-
-<script>
-    const display = document.getElementById("display");
-
-    function append(value) {
-        if (display.innerText === "0" && value !== ".") {
-            display.innerText = value;
-        } else {
-            display.innerText += value;
-        }
-    }
-
-    function clearAll() {
-        display.innerText = "0";
-    }
-
-    function delChar() {
-        if (display.innerText.length > 1) {
-            display.innerText = display.innerText.slice(0, -1);
-        } else {
-            display.innerText = "0";
-        }
-    }
-
-    function calculate() {
-        try {
-            let result = eval(display.innerText);
-            display.innerText = result;
-        } catch {
-            display.innerText = "Lỗi";
-        }
-    }
-</script>
-</body>
+    <!-- ==========================================================
+         JAVASCRIPT
+         Load file JS ở cuối body để đảm bảo DOM đã sẵn sàng
+         defer: load song song nhưng chạy sau khi HTML parse xong
+         ========================================================== -->
+    <script src="js/calculator.js"></script>
+  </body>
 </html>
