@@ -1,0 +1,583 @@
+/* ============================================================
+ * CALCULATOR - STYLESHEET
+ * ============================================================
+ * Mô tả  : File CSS chính cho ứng dụng Calculator
+ * Tác giả : CSBU103 - Week 4 Assignment
+ * Phiên bản: 1.0
+ * ============================================================
+ * Cấu trúc file:
+ *   1. Import & CSS Variables (Biến toàn cục)
+ *   2. Reset & Base Styles (Reset mặc định)
+ *   3. Layout (Bố cục tổng thể)
+ *   4. Calculator Container (Khung máy tính)
+ *   5. Display Area (Vùng hiển thị)
+ *   6. Button Grid (Lưới nút bấm)
+ *   7. Button Variants (Các loại nút)
+ *   8. History Panel (Bảng lịch sử)
+ *   9. Animations & Keyframes
+ *  10. Responsive Design
+ * ============================================================ */
+
+/* ==========================================================
+ * 1. IMPORT & CSS VARIABLES
+ * - Import font Inter từ Google Fonts
+ * - Định nghĩa các biến màu, kích thước dùng chung
+ * ========================================================== */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+:root {
+  /* --- Bảng màu chính (Color Palette) --- */
+  --bg-primary: #0a0a0f; /* Màu nền trang */
+  --bg-calculator: #1a1a2e; /* Màu nền máy tính */
+  --bg-display: #0d0d1a; /* Màu nền vùng hiển thị */
+  --bg-button: #2a2a3e; /* Màu nền nút số */
+  --bg-button-hover: #3a3a52; /* Màu nút số khi hover */
+
+  /* --- Màu nhấn (Accent Colors) --- */
+  --accent-orange: #ff6b35; /* Màu cam cho operator */
+  --accent-orange-hover: #ff8c5a; /* Màu cam khi hover */
+  --accent-green: #00d68f; /* Màu xanh cho nút = */
+  --accent-green-hover: #00f5a0; /* Màu xanh khi hover */
+  --accent-red: #ff4757; /* Màu đỏ cho AC */
+  --accent-red-hover: #ff6b7a; /* Màu đỏ khi hover */
+  --accent-blue: #5f6fff; /* Màu xanh dương cho MOD */
+  --accent-blue-hover: #7d8aff; /* Màu xanh dương hover */
+
+  /* --- Màu chữ (Text Colors) --- */
+  --text-primary: #ffffff; /* Chữ chính */
+  --text-secondary: #8888aa; /* Chữ phụ (expression) */
+  --text-result: #00d68f; /* Chữ kết quả */
+
+  /* --- Kích thước (Sizing) --- */
+  --calc-width: 380px; /* Chiều rộng calculator */
+  --btn-radius: 14px; /* Bo góc nút */
+  --calc-radius: 24px; /* Bo góc calculator */
+
+  /* --- Hiệu ứng (Effects) --- */
+  --shadow-glow: 0 0 40px rgba(95, 111, 255, 0.15); /* Bóng đổ phát sáng */
+  --transition-fast: 0.15s ease; /* Animation nhanh */
+  --transition-normal: 0.3s ease; /* Animation bình thường */
+}
+
+/* ==========================================================
+ * 2. RESET & BASE STYLES
+ * - Xóa margin/padding mặc định của browser
+ * - Thiết lập font và box-sizing chung
+ * ========================================================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased; /* Làm mượt font trên Chrome/Safari */
+  -moz-osx-font-smoothing: grayscale; /* Làm mượt font trên Firefox macOS */
+}
+
+body {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ==========================================================
+ * 3. LAYOUT
+ * - Căn giữa calculator theo cả chiều ngang và dọc
+ * - Background gradient tạo hiệu ứng depth
+ * ========================================================== */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  /* Gradient nền tạo hiệu ứng ánh sáng từ trung tâm */
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(95, 111, 255, 0.08) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      rgba(255, 107, 53, 0.05) 0%,
+      transparent 50%
+    ),
+    var(--bg-primary);
+}
+
+/* ==========================================================
+ * 4. CALCULATOR CONTAINER
+ * - Khung chính của máy tính
+ * - Glassmorphism effect (hiệu ứng kính mờ)
+ * ========================================================== */
+.calculator {
+  width: var(--calc-width);
+  background: linear-gradient(145deg, #1e1e35, #16162a);
+  border-radius: var(--calc-radius);
+  padding: 24px;
+  box-shadow: var(--shadow-glow);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  /* Animation xuất hiện khi load trang */
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Viền phát sáng nhẹ phía trên (highlight effect) */
+.calculator::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(95, 111, 255, 0.5),
+    transparent
+  );
+}
+
+/* Tiêu đề nhỏ phía trên */
+.calculator-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.calculator-header h1 {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================
+ * 5. DISPLAY AREA
+ * - Vùng hiển thị biểu thức (expression) và kết quả (result)
+ * - Expression: dòng nhỏ phía trên hiển thị phép tính đang gõ
+ * - Result: dòng lớn phía dưới hiển thị số/kết quả
+ * ========================================================== */
+.display {
+  background: var(--bg-display);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+/* Dòng expression (biểu thức) - phía trên */
+.display-expression {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-align: right;
+  min-height: 24px;
+  word-wrap: break-word;
+  margin-bottom: 8px;
+  transition: color var(--transition-fast);
+}
+
+/* Dòng result (kết quả) - phía dưới, lớn hơn */
+.display-result {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+  word-wrap: break-word;
+  transition: all var(--transition-normal);
+  line-height: 1.2;
+}
+
+/* Khi có kết quả, đổi màu chữ sang xanh */
+.display-result.has-result {
+  color: var(--text-result);
+}
+
+/* ==========================================================
+ * 6. BUTTON GRID
+ * - Sử dụng CSS Grid để tạo lưới 4 cột
+ * - Gap (khoảng cách) giữa các nút: 12px
+ * ========================================================== */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* ==========================================================
+ * 7. BUTTON VARIANTS
+ * - Base button: Style mặc định cho tất cả nút
+ * - .btn-number: Nút số (0-9, dấu chấm)
+ * - .btn-operator: Nút phép tính (+, -, ×, ÷)
+ * - .btn-mod: Nút MOD (chia lấy dư)
+ * - .btn-action: Nút AC, DEL
+ * - .btn-equal: Nút bằng (=)
+ * - .btn-zero: Nút 0 (chiếm 2 cột)
+ * ========================================================== */
+
+/* --- Base Button --- */
+.btn {
+  padding: 18px;
+  font-size: 1.15rem;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent; /* Xóa highlight khi tap trên mobile */
+}
+
+/* Ripple effect khi click (hiệu ứng sóng lan) */
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.4s ease,
+    height 0.4s ease,
+    opacity 0.4s ease;
+  opacity: 0;
+}
+
+.btn:active::after {
+  width: 200px;
+  height: 200px;
+  opacity: 1;
+  transition: 0s;
+}
+
+/* Hiệu ứng nhấn xuống khi click */
+.btn:active {
+  transform: scale(0.95);
+}
+
+/* --- Nút số --- */
+.btn-number {
+  background: var(--bg-button);
+  color: var(--text-primary);
+}
+
+.btn-number:hover {
+  background: var(--bg-button-hover);
+}
+
+/* --- Nút operator (+, -, ×, ÷) --- */
+.btn-operator {
+  background: var(--accent-orange);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-operator:hover {
+  background: var(--accent-orange-hover);
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+/* --- Nút MOD (chia lấy dư) --- */
+.btn-mod {
+  background: var(--accent-blue);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.btn-mod:hover {
+  background: var(--accent-blue-hover);
+  box-shadow: 0 4px 15px rgba(95, 111, 255, 0.3);
+}
+
+/* --- Nút AC (xóa tất cả) --- */
+.btn-clear {
+  background: var(--accent-red);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-clear:hover {
+  background: var(--accent-red-hover);
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+}
+
+/* --- Nút DEL (xóa 1 ký tự) --- */
+.btn-delete {
+  background: #3a2a2a;
+  color: var(--accent-red);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.btn-delete:hover {
+  background: #4a3535;
+}
+
+/* --- Nút bằng (=) --- */
+.btn-equal {
+  background: var(--accent-green);
+  color: #0a0a0f;
+  font-weight: 700;
+  font-size: 1.4rem;
+  grid-column: span 2; /* Chiếm 2 cột */
+}
+
+.btn-equal:hover {
+  background: var(--accent-green-hover);
+  box-shadow: 0 4px 20px rgba(0, 214, 143, 0.35);
+}
+
+/* --- Nút 0 (chiếm 2 cột) --- */
+.btn-zero {
+  grid-column: span 2;
+}
+
+/* ==========================================================
+ * 8. HISTORY PANEL
+ * - Bảng lịch sử phía dưới calculator
+ * - Toggle mở/đóng bằng nút
+ * - Hiển thị các phép tính đã thực hiện
+ * ========================================================== */
+.history-toggle {
+  width: 100%;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.history-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: "Inter", sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 20px;
+  transition: all var(--transition-fast);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.history-toggle-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Panel lịch sử - ẩn mặc định */
+.history-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 8px;
+}
+
+/* Khi mở history */
+.history-panel.open {
+  max-height: 250px;
+}
+
+.history-list {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+/* Mỗi dòng lịch sử */
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: background var(--transition-fast);
+  cursor: pointer;
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Biểu thức trong lịch sử */
+.history-expression {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Kết quả trong lịch sử */
+.history-result {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-green);
+}
+
+/* Nút xóa lịch sử */
+.history-clear {
+  width: 100%;
+  text-align: center;
+  padding-top: 8px;
+}
+
+.history-clear-btn {
+  background: none;
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  color: var(--accent-red);
+  font-family: "Inter", sans-serif;
+  font-size: 0.75rem;
+  padding: 5px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.history-clear-btn:hover {
+  background: rgba(255, 71, 87, 0.1);
+}
+
+/* Custom scrollbar cho history list */
+.history-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+/* ==========================================================
+ * 9. KEYBOARD INDICATOR
+ * - Chỉ báo nhỏ cho biết hỗ trợ bàn phím
+ * ========================================================== */
+.keyboard-hint {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.7rem;
+  color: rgba(136, 136, 170, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.keyboard-hint kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.65rem;
+  color: rgba(136, 136, 170, 0.6);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  margin: 0 2px;
+}
+
+/* ==========================================================
+ * 10. ANIMATIONS & KEYFRAMES
+ * - slideUp: Animation calculator trượt lên khi load
+ * - fadeIn: Fade hiệu ứng cho history items
+ * ========================================================== */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.history-item {
+  animation: fadeIn 0.3s ease;
+}
+
+/* ==========================================================
+ * 11. RESPONSIVE DESIGN
+ * - Điều chỉnh kích thước cho các màn hình nhỏ
+ * - Mobile first approach
+ * ========================================================== */
+
+/* Màn hình nhỏ hơn 420px (điện thoại) */
+@media (max-width: 420px) {
+  .calculator {
+    width: 100%;
+    border-radius: 20px;
+    padding: 18px;
+  }
+
+  .display {
+    padding: 16px 18px;
+    min-height: 90px;
+  }
+
+  .display-result {
+    font-size: 2rem;
+  }
+
+  .buttons {
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 16px;
+    font-size: 1.05rem;
+  }
+
+  /* Ẩn keyboard hint trên mobile vì không có bàn phím vật lý */
+  .keyboard-hint {
+    display: none;
+  }
+}
+
+/* Màn hình rất nhỏ (320px) */
+@media (max-width: 340px) {
+  .btn {
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+
+  .buttons {
+    gap: 8px;
+  }
+}
