@@ -1,0 +1,904 @@
+/* ==========================================================================
+   CV — Professional Stylesheet
+   Author : Huy Huynh (25560070)
+   ========================================================================== */
+
+/* ==========================================================================
+   1. CSS CUSTOM PROPERTIES (VARIABLES)
+   Tập trung quản lý màu sắc, typography, spacing, shadow tại 1 nơi.
+   Khi cần đổi theme, chỉ sửa ở đây.
+   ========================================================================== */
+:root {
+  /* ── Color Palette ── */
+  --clr-primary: #0366d6;
+  --clr-primary-rgb: 3, 102, 214;
+  --clr-accent: #2ea44f;
+  --clr-bg: #e8f6ff;
+  --clr-surface: #ffffff;
+  --clr-sidebar-bg: linear-gradient(180deg, #f0f8ff 0%, #e3f2fd 100%);
+  --clr-panel-bg: linear-gradient(
+    160deg,
+    #87cefa 0%,
+    #e0ffff 50%,
+    #f0faff 100%
+  );
+  --clr-text: #07263b;
+  --clr-text-muted: #6b7280;
+  --clr-border: rgba(7, 38, 59, 0.08);
+  --clr-white: #ffffff;
+  --clr-white-70: rgba(255, 255, 255, 0.7);
+  --clr-white-90: rgba(255, 255, 255, 0.9);
+
+  /* ── Typography ── */
+  --ff-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --fs-xs: 0.75rem; /* 12px */
+  --fs-sm: 0.8125rem; /* 13px */
+  --fs-base: 0.9375rem; /* 15px */
+  --fs-md: 1.125rem; /* 18px */
+  --fs-lg: 1.25rem; /* 20px */
+  --fs-xl: 1.5rem; /* 24px */
+  --fw-regular: 400;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+
+  /* ── Spacing ── */
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 12px;
+  --sp-lg: 16px;
+  --sp-xl: 20px;
+  --sp-2xl: 28px;
+  --sp-3xl: 36px;
+
+  /* ── Border Radius ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 2px 8px rgba(2, 36, 64, 0.06);
+  --shadow-md: 0 8px 24px rgba(2, 36, 64, 0.08);
+  --shadow-lg: 0 18px 50px rgba(2, 36, 64, 0.12);
+  --shadow-glow: 0 8px 22px rgba(var(--clr-primary-rgb), 0.15);
+
+  /* ── Transitions ── */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+}
+
+/* ==========================================================================
+   2. RESET / BASE
+   Normalize trình duyệt, đảm bảo nhất quán cross-browser.
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-base);
+  color: var(--clr-text);
+  background: linear-gradient(
+    180deg,
+    var(--clr-bg) 0%,
+    var(--clr-surface) 100%
+  );
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-3xl);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--clr-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover,
+a:focus-visible {
+  color: #024ea4;
+  text-decoration: underline;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+blockquote {
+  margin: 0;
+}
+
+/* Visually hidden — accessible cho screen reader nhưng ẩn trên giao diện */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   3. CV WRAPPER — Layout chính 2 cột
+   Dùng CSS Grid chia sidebar (300px) + main (1fr).
+   ========================================================================== */
+.cv {
+  width: 1000px;
+  max-width: 96%;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 1fr auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background: var(--clr-white-90);
+  backdrop-filter: blur(8px);
+}
+
+/* ==========================================================================
+   4. SIDEBAR — Cột trái: Avatar, tên, liên hệ
+   ========================================================================== */
+.sidebar {
+  grid-row: 1 / 3;
+  padding: var(--sp-2xl) var(--sp-xl);
+  background: var(--clr-sidebar-bg);
+  border-right: 1px solid var(--clr-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-md);
+}
+
+/* ── Avatar ── */
+.avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(var(--clr-primary-rgb), 0.12);
+  border: 3px solid var(--clr-white);
+  flex-shrink: 0;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 28px rgba(var(--clr-primary-rgb), 0.2);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Name & Role ── */
+.sidebar__name {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-extrabold);
+  line-height: 1.3;
+  color: var(--clr-text);
+}
+
+.sidebar__role {
+  font-size: var(--fs-sm);
+  color: var(--clr-text-muted);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ── Contact Info ── */
+.contact {
+  font-style: normal; /* Override default <address> italic */
+  width: 100%;
+  margin-top: var(--sp-sm);
+}
+
+.contact__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+  font-size: var(--fs-sm);
+}
+
+.contact__list dd {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  justify-content: center;
+}
+
+.contact__icon {
+  font-size: var(--fs-base);
+  flex-shrink: 0;
+}
+
+/* ── Availability Badges ── */
+.sidebar__availability {
+  margin-top: auto;
+  display: flex;
+  gap: var(--sp-xs);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.3px;
+}
+
+.badge--green {
+  background: rgba(46, 164, 79, 0.12);
+  color: #1a7f37;
+}
+
+.badge--blue {
+  background: rgba(var(--clr-primary-rgb), 0.1);
+  color: var(--clr-primary);
+}
+
+.badge--purple {
+  background: rgba(130, 80, 223, 0.1);
+  color: #6f42c1;
+}
+
+/* ==========================================================================
+   5. MAIN CONTENT — Cột phải: Tabs + Panels
+   ========================================================================== */
+.content {
+  padding: var(--sp-xl) var(--sp-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  min-height: 480px;
+}
+
+/* ==========================================================================
+   6. TABS — Navigation bar
+   ========================================================================== */
+.tabs {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+}
+
+.tabs__btn {
+  padding: var(--sp-sm) var(--sp-lg);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--clr-border);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--clr-text);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tabs__btn:hover {
+  background: rgba(var(--clr-primary-rgb), 0.06);
+  border-color: rgba(var(--clr-primary-rgb), 0.2);
+  color: var(--clr-primary);
+}
+
+.tabs__btn:focus-visible {
+  outline: 2px solid var(--clr-primary);
+  outline-offset: 2px;
+}
+
+.tabs__btn--active,
+.tabs__btn--active:hover {
+  background: var(--clr-primary);
+  color: var(--clr-white);
+  border-color: var(--clr-primary);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ==========================================================================
+   7. PANELS — Content sections
+   ========================================================================== */
+.panel {
+  flex: 1;
+  border-radius: var(--radius-md);
+  padding: var(--sp-xl);
+  background: var(--clr-panel-bg);
+  box-shadow: inset 0 -40px 80px rgba(255, 255, 255, 0.15);
+  overflow-y: auto;
+  position: relative;
+
+  /* ── Transition animation ── */
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base);
+}
+
+/* Panel đang active — hiển thị */
+.panel--active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hidden panel */
+.panel[hidden] {
+  display: none;
+}
+
+/* Cloud decoration */
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 300'><g fill='%23ffffff' fill-opacity='0.9'><ellipse cx='120' cy='70' rx='70' ry='30'/><ellipse cx='160' cy='70' rx='40' ry='24'/><ellipse cx='90' cy='70' rx='40' ry='24'/><ellipse cx='420' cy='30' rx='140' ry='40'/><ellipse cx='640' cy='110' rx='100' ry='34'/></g></svg>");
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-size: 40%;
+}
+
+/* ── Panel Typography ── */
+.panel__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-extrabold);
+  margin-bottom: var(--sp-xs);
+  position: relative;
+  z-index: 1;
+}
+
+.panel__subtitle {
+  font-size: var(--fs-sm);
+  color: var(--clr-text-muted);
+  margin-bottom: var(--sp-md);
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   8. OVERVIEW PANEL
+   ========================================================================== */
+.overview__summary {
+  background: var(--clr-white-70);
+  border-left: 3px solid var(--clr-primary);
+  padding: var(--sp-md) var(--sp-lg);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: var(--sp-md) 0;
+  line-height: 1.7;
+  font-size: var(--fs-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.overview__summary em {
+  color: var(--clr-primary);
+  font-style: normal;
+  font-weight: var(--fw-semibold);
+}
+
+/* ==========================================================================
+   9. PILL / BADGE LIST
+   ========================================================================== */
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+  margin-top: var(--sp-md);
+  position: relative;
+  z-index: 1;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  padding: 6px 14px;
+  background: var(--clr-white-70);
+  border-radius: var(--radius-full);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--clr-text);
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.pill:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.pill--sm {
+  padding: 4px 10px;
+  font-size: var(--fs-xs);
+}
+
+/* ==========================================================================
+   10. TIMELINE — Education
+   ========================================================================== */
+.timeline {
+  counter-reset: timeline-counter;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline__item {
+  position: relative;
+  padding: var(--sp-md) var(--sp-lg);
+  padding-left: var(--sp-xl);
+  margin-bottom: var(--sp-md);
+  background: var(--clr-white-70);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--clr-primary);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.timeline__item:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.timeline__title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--clr-text);
+}
+
+.timeline__period {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  color: var(--clr-primary);
+  font-weight: var(--fw-semibold);
+  margin: var(--sp-xs) 0;
+  background: rgba(var(--clr-primary-rgb), 0.08);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+}
+
+.timeline__item p {
+  font-size: var(--fs-sm);
+  color: var(--clr-text-muted);
+  margin-top: var(--sp-xs);
+  line-height: 1.6;
+}
+
+.timeline__item mark {
+  background: rgba(var(--clr-primary-rgb), 0.12);
+  color: var(--clr-primary);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: var(--fw-bold);
+}
+
+/* ── Subsection ── */
+.subsection {
+  margin-top: var(--sp-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.subsection__title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-sm);
+}
+
+.subsection ul {
+  list-style: disc;
+  padding-left: var(--sp-xl);
+}
+
+.subsection li {
+  font-size: var(--fs-sm);
+  color: var(--clr-text-muted);
+  line-height: 1.6;
+}
+
+.subsection cite {
+  font-style: italic;
+  color: var(--clr-text);
+  font-weight: var(--fw-semibold);
+}
+
+/* ==========================================================================
+   11. PROJECT GRID — Cards
+   ========================================================================== */
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-md);
+  margin-top: var(--sp-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  background: var(--clr-white-70);
+  border-radius: var(--radius-md);
+  padding: var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xs);
+  backdrop-filter: blur(4px);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.card__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--clr-text);
+  line-height: 1.4;
+}
+
+.card__year {
+  font-weight: var(--fw-regular);
+  color: var(--clr-text-muted);
+}
+
+.card__desc {
+  font-size: var(--fs-sm);
+  color: var(--clr-text-muted);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.card__tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs);
+  margin-top: var(--sp-sm);
+  padding-top: var(--sp-sm);
+  border-top: 1px solid var(--clr-border);
+}
+
+/* ==========================================================================
+   12. CERTIFICATE GRID
+   ========================================================================== */
+.cert-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-md);
+  margin-top: var(--sp-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.cert-card {
+  background: var(--clr-white-70);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.cert-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.cert-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.cert-card:hover img {
+  transform: scale(1.03);
+}
+
+.cert-card figcaption {
+  padding: var(--sp-sm) var(--sp-md);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--clr-text);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   13. SKILLS TABLE + PROGRESS BAR
+   ========================================================================== */
+.skills-table {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--sp-sm);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--clr-white-70);
+}
+
+.skills-table thead {
+  background: rgba(var(--clr-primary-rgb), 0.08);
+}
+
+.skills-table th {
+  padding: var(--sp-sm) var(--sp-md);
+  text-align: left;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--clr-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skills-table td {
+  padding: var(--sp-sm) var(--sp-md);
+  font-size: var(--fs-sm);
+  vertical-align: middle;
+  border-top: 1px solid var(--clr-border);
+}
+
+.skills-table tbody tr {
+  transition: background var(--transition-fast);
+}
+
+.skills-table tbody tr:hover {
+  background: rgba(var(--clr-primary-rgb), 0.03);
+}
+
+/* ── Progress Bar ── */
+.progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  min-width: 80px;
+}
+
+.progress__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--clr-primary), #58a6ff);
+  border-radius: var(--radius-full);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   14. FOOTER
+   ========================================================================== */
+.cv-footer {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--sp-md) var(--sp-xl);
+  font-size: var(--fs-xs);
+  color: var(--clr-text-muted);
+  background: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid var(--clr-border);
+}
+
+/* ==========================================================================
+   15. ANIMATIONS — Fade-in khi load trang
+   ========================================================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cv {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Stagger animation cho sidebar items */
+.sidebar > * {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.sidebar > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.sidebar > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.sidebar > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.sidebar > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.sidebar > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+/* ==========================================================================
+   16. RESPONSIVE — Mobile breakpoint
+   Dưới 820px: chuyển sang 1 cột, sidebar nằm ngang.
+   ========================================================================== */
+@media (max-width: 820px) {
+  body {
+    padding: var(--sp-lg);
+  }
+
+  .cv {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .sidebar {
+    grid-row: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-lg);
+    padding: var(--sp-lg);
+    border-right: none;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .sidebar__availability {
+    margin-top: 0;
+  }
+
+  .contact__list dd {
+    justify-content: flex-start;
+  }
+
+  .content {
+    padding: var(--sp-lg);
+  }
+
+  .tabs {
+    gap: var(--sp-xs);
+  }
+
+  .tabs__btn {
+    padding: 6px 10px;
+    font-size: var(--fs-xs);
+  }
+
+  .project-grid,
+  .cert-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel::before {
+    background-size: 55%;
+    background-position: right -10px top -8px;
+  }
+}
+
+/* Extra small — phone */
+@media (max-width: 480px) {
+  .sidebar {
+    flex-direction: column;
+  }
+
+  .tabs__btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   17. PRINT STYLES
+   In CV ra giấy: bỏ shadow, màu nền, tabs; hiển thị tất cả panel.
+   ========================================================================== */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    padding: 0;
+    min-height: auto;
+  }
+
+  .cv {
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    display: block;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    flex-direction: row;
+    gap: var(--sp-lg);
+    justify-content: flex-start;
+  }
+
+  /* Ẩn tabs — hiện tất cả panels khi in */
+  .tabs {
+    display: none !important;
+  }
+
+  .panel,
+  .panel[hidden] {
+    display: block !important;
+    opacity: 1 !important;
+    transform: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: var(--sp-lg);
+    border: 1px solid #ddd;
+  }
+
+  .panel::before {
+    display: none;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555;
+  }
+
+  .badge,
+  .sidebar__availability {
+    display: none;
+  }
+}
